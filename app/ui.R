@@ -27,31 +27,43 @@ dashboardPage(
       # https://fontawesome.com/v6.0/icons/database
       # or here:
       # https://getbootstrap.com/docs/3.3/components/#glyphicons
-      # ...... Sidebar - Penguins  ----
+      # ...... Sidebar - about PP  ----
       menuItem(
-        text = 'Penguin Data', 
-        icon = icon('feather', lib = "font-awesome"),
-        tabName = 'penguin'
+        text = 'About', 
+        icon = icon('globe', lib = "font-awesome"),
+        tabName = 'about'
+      ),
+      # ...... Sidebar - Histogram  ----
+      menuItem(
+        text = 'Histogram', 
+        icon = icon('signal', lib = "font-awesome"),
+        tabName = 'hist'
+      ),
+      # ...... Sidebar - Scatter plot  ----
+      menuItem(
+        text = 'Scatterplot', 
+        icon = icon('braille', lib = "font-awesome"),
+        tabName = 'scatter'
       ),
       # ...... Sidebar - Ice  ----
       menuItem(
-        text = 'Ice Data', 
+        text = 'Other Data', 
         icon = icon('snowflake', lib = "font-awesome"),
-        tabName = 'ice'
-      )
+        tabName = 'other'
+      ),
+      menuItem(
+        text = "Palmer Penguins Site", 
+        icon = icon('linux', lib = "font-awesome"),
+        href = "https://allisonhorst.github.io/palmerpenguins/")
     )
   ),
   # .. Dashboard Body  ----
   dashboardBody(
     tabItems(
-      # ...... Body - penguins    ---- 
+      # ...... Body - about    ---- 
       tabItem(
-        tabName = 'penguin',
+        tabName = 'about',
         h1("Palmer Penguins Data Exploration"),
-        tabsetPanel(
-          # ............  Tab - about    ---- 
-          tabPanel(
-            title = "About",
             fluidRow(
               imageOutput(
                 outputId = "lter_penguins"
@@ -62,10 +74,15 @@ dashboardPage(
               )
             ), 
             tags$text("Artwork by @allison_horst")
-          ),
-          # ............  Tab - histogram    ---- 
+      ),
+      # ...... Body - histogram    ---- 
+      tabItem(
+        tabName = 'hist',
+        tabsetPanel(
+          # ............  Tab - hist slider   ---- 
           tabPanel(
-            title = "Histogram",
+            title = "Slider",
+            tags$hr(),
             fluidRow(
               column(
                 width = 4,
@@ -80,16 +97,20 @@ dashboardPage(
                 )
               ),
               column(
-                width = 6,
+                width = 8,
                 plotOutput(
                   outputId = "hist_out"
                 )
               )
-            ),
+            )
+          ),
+          # ............  Tab - hist knob   ---- 
+          tabPanel(
+            title = 'Knob',
             tags$hr(),
             fluidRow(
               column(
-                width = 4,
+                width = 3,
                 shinyWidgets::knobInput(
                   inputId = "hist_knob",
                   label = "Binwidth",
@@ -102,30 +123,36 @@ dashboardPage(
                 )
               ),
               column(
-                width = 6,
+                width = 8,
                 plotOutput(
                   outputId = "hist_out_2"
                 )
               )
             )
-          ),
-          # ............  Tab - scatterplot    ---- 
+          )
+        )
+      ),
+      # ...... Body - scatter plot    ---- 
+      tabItem(
+        tabName = 'scatter',
+        h2("Penguin Scatterplot"),
+        tabsetPanel(
           tabPanel(
-            title = "Scatterplot",
-            h2("Penguin Scatterplot"),
+            title = "radiobuttons",
+            tags$hr(),
             fluidRow(
               column(
-                width = 4,
+                width = 2,
                 radioButtons(
-                  inputId = "island_choice",
+                  inputId = "island_radio",
                   label = "Choose an Island",
                   choices = c("All", levels(penguins$island))
                 )
               ),
               column(
-                width = 6,
+                width = 8,
                 plotOutput(
-                  outputId = "scatter_out"
+                  outputId = "scatter_radio_out"
                 )
               )
             ),
@@ -138,13 +165,38 @@ dashboardPage(
                 )
               )
             )
+          ),
+          tabPanel(
+            title = 'checkbox',
+            tags$hr(),
+            fluidRow(
+              column(
+                width = 2,
+                checkboxGroupButtons(
+                  inputId = "island_check",
+                  label = "Choose an Island",
+                  direction = 'vertical',
+                  choices = levels(penguins$island),
+                  selected = levels(penguins$island),
+                  checkIcon = list(
+                    yes = icon("ok", lib = "glyphicon", style = "color: green"),
+                    no = icon("remove", lib = "glyphicon", style = "color: red"))
+                )
+              ),
+              column(
+                width = 8,
+                plotOutput(
+                  outputId = "scatter_check_out"
+                )
+              )
+            )
           )
         )
       ),
+      # ...... Body - other    ---- 
       tabItem(
-        tabName = "ice",
-        h1("Antarctic Ice Data"),
-        
+        tabName = "other",
+        h1("Other Data"),
       )
     )
   )
