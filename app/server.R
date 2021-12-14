@@ -31,6 +31,18 @@ shinyServer(function(input, output, session) {
            title = "Penguin flipper lengths")
   })
   
+  output$hist_out_2 <- renderPlot({
+    ggplot(data = penguins, aes(x = flipper_length_mm)) +
+      geom_histogram(aes(fill = species), 
+                     alpha = 0.5, binwidth = input$hist_knob,
+                     position = "identity") +
+      scale_fill_manual(values = c("darkorange","purple","cyan4")) +
+      theme_minimal() +
+      labs(x = "Flipper length (mm)",
+           y = "Frequency",
+           title = "Penguin flipper lengths")
+  })
+  
   island <- reactive({
     
     island_filter <- if (input$island_choice != "All") {
@@ -62,11 +74,12 @@ shinyServer(function(input, output, session) {
 
   output$df_output <- renderDT({
     datatable(
-      island(), rownames = FALSE,  
+      island(), rownames = FALSE, extensions = 'Buttons',  
       options = list(
         searching = TRUE,  paging = FALSE,
         ordering = TRUE, info = FALSE,
-        scrollX = TRUE, scrollY = "500px",
+        scrollX = TRUE, scrollY = "500px", dom = 'Bfrtip',
+        buttons =  c('copy', 'csv', 'excel', 'pdf', 'print'),
         initComplete = JS(
           "function(settings, json) {",
           "$(this.api().table().header()).css({",

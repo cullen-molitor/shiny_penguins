@@ -56,10 +56,9 @@ dashboardPage(
               imageOutput(
                 outputId = "lter_penguins"
               ),
+              tags$hr(),
               fluidRow(
-                imageOutput(
-                  outputId = "culmen_depth"
-                )
+                tags$img(height = 450, width = 725, src = 'culmen_depth.png')
               )
             ), 
             tags$text("Artwork by @allison_horst")
@@ -76,7 +75,7 @@ dashboardPage(
                   min = .5,
                   max = 5,
                   step = .5,
-                  value = .5,
+                  value = 2.5,
                   animate = T
                 )
               ),
@@ -84,6 +83,28 @@ dashboardPage(
                 width = 6,
                 plotOutput(
                   outputId = "hist_out"
+                )
+              )
+            ),
+            tags$hr(),
+            fluidRow(
+              column(
+                width = 4,
+                shinyWidgets::knobInput(
+                  inputId = "hist_knob",
+                  label = "Binwidth",
+                  min = .5,
+                  max = 5,
+                  step = .5,
+                  value = 2.5,
+                  fgColor = 'black',
+                  bgColor = 'white'
+                )
+              ),
+              column(
+                width = 6,
+                plotOutput(
+                  outputId = "hist_out_2"
                 )
               )
             )
